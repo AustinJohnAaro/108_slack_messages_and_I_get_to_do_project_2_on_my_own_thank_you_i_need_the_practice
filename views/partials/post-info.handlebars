@@ -1,0 +1,13 @@
+<div class="card" post_id="{{id}}">
+  <div class="card-header">
+    <h4><i class="far fa-user-circle"> {{user.username}}: <a class="link" href="/post/{{id}}">{{title}}</a></i></h4>
+    <p>Posted by {{user.username}} on {{format_date created_at}}
+      {{love_count}} {{format_plural "love(s) on this Thought" love_count}}
+      <br> at {{format_date created_at}}
+      |
+      <a href="/post/{{id}}">{{comments.length}} {{format_plural "comment" comments.length}}</a>
+    </p>
+  </div>
+  <p class="card-body">{{content}}</p>
+  <button type="button" class="love-btn" post_id="{{id}}"><i class="fas fa-hand-holding-heart"></i> Love</button>
+</div> 
