@@ -1,37 +1,35 @@
 const router = require('express').Router();
 const sequelize = require('../config/connection');
-const { Post, User, Comment, Love } = require('../models');
+const { User, Todo } = require('../models');
 
-// get all posts for homepage
+// get all todos for homepage
 router.get('/', (req, res) => {
-  Post.findAll({
+  Todo.findAll({
+    where: {
+      user_id: 1,//req.session.user_id
+    },
     attributes: [
       'id',
-      'content',
-      'title',
-      'created_at',
-      [sequelize.literal('(SELECT COUNT(*) FROM love AS love WHERE love .post_id = post.id)'), 'love_count']
+      'todo_text',
+      'user_id'
     ],
     include: [
       {
-        model: Comment,
-        attributes: ['id', 'comment_text', 'post_id', 'user_id', 'created_at'],
-        include: {
-          model: User,
-          attributes: ['username']
-        }
-      },
-      {
         model: User,
         attributes: ['username']
+
       }
     ]
   })
-    .then(dbPostData => {
-      const posts = dbPostData.map(post => post.get({ plain: true }));
+    .then(dbTodoData => {
+      const todos = dbTodoData.map(todo => todo.get({ plain: true }));
 
+      // res.send({
+      //   message: "HERE IS THE TODOS",
+      //   todos: todos
+      // })
       res.render('homepage', {
-        posts,
+        todos,
         loggedIn: req.session.loggedIn
       });
     })
@@ -41,44 +39,34 @@ router.get('/', (req, res) => {
     });
 });
 
-// get single post
-router.get('/post/:id', (req, res) => {
+// get single todo
+router.get('/todo/:id', (req, res) => {
   Post.findOne({
     where: {
       id: req.params.id
     },
     attributes: [
       'id',
-      'content',
-      'title',
-      'created_at',
-      [sequelize.literal('(SELECT COUNT(*) FROM love AS love WHERE love .post_id = post.id)'), 'love_count']
+      'todo_text',
+      'user_id'
     ],
     include: [
-      {
-        model: Comment,
-        attributes: ['id', 'comment_text', 'post_id', 'user_id', 'created_at'],
-        include: {
-          model: User,
-          attributes: ['username']
-        }
-      },
       {
         model: User,
         attributes: ['username']
       }
     ]
   })
-    .then(dbPostData => {
-      if (!dbPostData) {
-        res.status(404).json({ message: 'No post found with this id' });
+    .then(dbTodoData => {
+      if (!dbTodoData) {
+        res.status(404).json({ message: 'No todo found with this id' });
         return;
       }
 
-      const post = dbPostData.get({ plain: true });
+      const todo = dbTodoData.get({ plain: true });
 
-      res.render('single-post', {
-        post,
+      res.render('single-todo', {
+        todo,
         loggedIn: req.session.loggedIn
       });
     })
@@ -88,59 +76,7 @@ router.get('/post/:id', (req, res) => {
     });
 });
 
-router.get('/posts-comments', (req, res) => {
-  Post.findOne({
-    where: {
-      id: req.params.id
-    },
-    attributes: ['id', 'content', 'title', 'created_at'],
-    include: [{
-      model: Comment,
-      attributes: ['id', 'comment_text', 'post_id', 'user_id', 'created_at'],
-      include: {
-        model: User,
-        attributes: ['username']
-      }
-    },
-    {
-      model: User,
-      attributes: ['username']
-    }
-    ]
-  })
-    .then(dbPostData => {
-      if (!dbPostData) {
-        res.status(404).json({ message: 'No post found with this id' });
-        return;
-      }
-      const post = dbPostData.get({ plain: true });
 
-      res.render('posts-comments', { post, loggedIn: req.session.loggedIn });
-    })
-    .catch(err => {
-      console.log(err);
-      res.status(500).json(err);
-    });
-});
-
-
-router.get('/login', (req, res) => {
-  if (req.session.loggedIn) {
-    res.redirect('/');
-    return;
-  }
-
-  res.render('login');
-});
-
-router.get('/signup', (req, res) => {
-  if (req.session.loggedIn) {
-    res.redirect('/login');
-    return;
-  }
-  res.render('signup');
-});
-
-module.exports = router; 
+module.exports = router;
 
 
