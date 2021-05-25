@@ -21,12 +21,13 @@
     },
     "repository": {
         "type": "git",
-        "url": ""
+        "url": "https://github.com/AustinJohnAaro/_thank_you_i_need_the_practice"
     },
     "author": "",
     "license": "ISC",
     "bugs": {
-        "url": " "
+        "url": "https://git.heroku.com/fast-escarpment-48987.git "
     },
-    "homepage": " "
+    "homepage": "  https://fast-escarpment-48987.herokuapp.com/" 
+    
 }
