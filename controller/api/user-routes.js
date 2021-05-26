@@ -1,7 +1,15 @@
 const router = require('express').Router();
 const sequelize = require('../../config/connection');
 const { User, Todo } = require('../../models');
-router.get('/login', (req, res) => {
+
+router.get("/login",(req,res) => {
+  if (req.session.loggedIn){
+    res.redirect("/")
+    return
+  }
+  res.render("login")
+})
+router.post('/login', (req, res) => {
     User.findOne({
       where: {
         email: req.body.username

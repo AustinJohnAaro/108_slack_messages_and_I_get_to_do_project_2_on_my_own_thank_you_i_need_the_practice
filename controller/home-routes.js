@@ -1,9 +1,14 @@
 const router = require('express').Router();
+
 const sequelize = require('../config/connection');
 const { User, Todo } = require('../models');
 
 // get all todos for homepage
 router.get('/', (req, res) => {
+  if (!req.session.loggedIn){
+    res.redirect("/api/users/login")
+    return
+  }
   Todo.findAll({
     where: {
       user_id: 1,//req.session.user_id

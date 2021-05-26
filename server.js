@@ -44,9 +44,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 app.use(routes);
-app.get('/', (req, res) => {
-  res.send(process.env.SECRET_KEY);
-})
 
 
 sequelize.sync({force: false}).then(() => {
