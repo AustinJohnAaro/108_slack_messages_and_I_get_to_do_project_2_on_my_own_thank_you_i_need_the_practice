@@ -1,6 +1,6 @@
 // import all models
 const Todo = require('./Todo');
-const User = require('./User');
+const User = require('./user');
 
 
 // create associations
