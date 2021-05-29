@@ -11,8 +11,8 @@ const app = express();
 const port = process.env.PORT || 3000;;
 
 
-// / we are going to change the port if we are deploying in heroku
-// // if not we are demoing in localhost 
+// its deploying on  heroku
+// you dum pice of shit // 
 
 const sequelize = require("./config/connection");
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
